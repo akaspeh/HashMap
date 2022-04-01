@@ -8,18 +8,21 @@
 #include <iostream>
 
 using namespace std;
-template <typename T>
 
+template <typename T>
 class LinkedList {
 private:
+    int cur = -1;
     struct Node{
+        long long key;
         T data;
         Node* next;
     };
+
     Node* head;
     Node* tail;
-    int cur = -1;
 public:
+
     LinkedList(){
         head = nullptr;
         tail = nullptr;
@@ -36,19 +39,10 @@ public:
         tail = nullptr;
     }
 
-    void reverse(){
-        int size = cur+1;
-        for(int i = 0; i < size; i++){
-            T a = get(size-i-1);
-            push_back(a);
-        }
-        for(int i = 0; i < size; i++){
-            pop_front();
-        }
-    }
-    void push_back(T element){
+    void push_back(long long key,T element){
         Node *newNode = new Node;
         newNode->data = element;
+        newNode->key = key;
         newNode->next = nullptr;
 
         if(cur == -1){
@@ -62,103 +56,77 @@ public:
             cur++;
         }
     }
-    void push_front(T element){
-        Node *newNode = new Node;
-        newNode->data = element;
-        newNode->next = nullptr;
 
-        if(cur == -1){
-            head = newNode;
-            tail = newNode;
-            cur++;
-        }
-        else{
-            cur++;
-            newNode->next = head;
-            head = newNode;
-        }
-    }
-    T pop_front(){
+    long long pop_front_key(){
         if(cur == -1){
             cout << "nothing to pop\n";
-            return T{};
+            return 0;
         }
-        else if(tail==head){
+        else{
+            long long a = head->key;
+            return a;
+        }
+    }
+    T pop_front() {
+        if (cur == -1) {
+            cout << "nothing to pop\n";
+            return T{};
+        } else if (head == tail) {
             T a = head->data;
             cur--;
             delete head;
             head = nullptr;
             tail = nullptr;
             return a;
-        }
-        else{
+        } else {
             T a = head->data;
-            Node *temp = head;
-            head = head->next;
-            delete temp;
+            Node *temp = head->next;
+            head = temp;
             cur--;
             return a;
         }
     }
-    T pop_back(){
-        if(cur == -1){
-            cout << "nothing to pop\n";
-            return T{};
-        }
-        else if(tail==head){
-            T a = tail->data;
-            delete head;
-            cur--;
-            head = nullptr;
-            tail = nullptr;
-            return a;
-        }
-        else{
-            T a = tail->data;
-            Node* second_last = head;
-            while (second_last->next->next != nullptr)
-                second_last = second_last->next;
-            tail = second_last;
-            delete second_last->next;
-            second_last->next = nullptr;
-            cur--;
-            return a;
-        }
-    }
-    void print(){
-        Node* curr = head;
-        while(curr != nullptr){
-            cout << curr->data << ' ';
-            curr = curr->next;
-        }
-    }
+
     int size(){
         return cur+1;
     }
-    T get(int N){
-        if(N>cur){
-            return T{};
-        }
-        else{
-            Node* curr = head;
-            for(int i = 0; i != N;i++){
-                curr = curr->next;
+
+    void del_el(unsigned long long key)
+    {
+        Node* next_node = head;
+        Node* prev_node = nullptr;
+        while (next_node != nullptr)
+        {
+            if (next_node->key == key)
+            {
+                if (prev_node!=nullptr)
+                    prev_node->next = next_node->next;
+                else
+                    head = next_node->next;
+
+                delete next_node;
+                cur--;
+                return;
             }
-            T a = curr->data;
-            return a;
+
+            prev_node = next_node;
+            next_node = next_node->next;
         }
     }
-    void clear(){
-        Node *curr = head;
-        for(int i = 0;i<cur;i++){
-            curr = curr->next;
-            delete head;
-            head = curr;
+
+    T* get(unsigned long long key)
+    {
+        Node* a = head;
+        while (a!=nullptr)
+        {
+            if (a->key == key)
+                return &a->data;
+            a = a->next;
         }
-        delete head;
-        head = nullptr;
+        return nullptr;
     }
 };
+
 
 
 #endif //HESHMAP_LINKEDLIST_H

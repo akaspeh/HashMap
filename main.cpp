@@ -1,5 +1,4 @@
 #include <iostream>
-#include "LinkedList.h"
 #include <ctime>
 #include <cstdlib>
 #include <cstring>
@@ -12,23 +11,9 @@ using namespace std;
 int main() {
     srand(time(nullptr));
     Hashmap<int> Hashmap;
-    cout << Hashmap.hash(1) << '\n';
-    //Hashmap.len();
-    cout << Hashmap.hash(2) << '\n';
-    //Hashmap.len();
-    cout << Hashmap.hash(3) << '\n';
-    //Hashmap.len();
-    cout << Hashmap.hash(4) << '\n';
-    //Hashmap.len();
-    cout << Hashmap.hash(5) << '\n';
-    Hashmap.len();
-    cout << Hashmap.hash(6) << '\n';
-    //Hashmap.len();
-    cout << Hashmap.hash(7) << '\n';
-    //Hashmap.len();
-    cout << Hashmap.hash(8) << '\n';
-    //Hashmap.len();
-    cout << Hashmap.hash(9) << '\n';
-    //Hashmap.len();
+    for(int i = 0; i < 1000; i++){
+        int a = rand()%1000;
+        Hashmap.insert(rand()%50,a);
+    }
     return 0;
 }

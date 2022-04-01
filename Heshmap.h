@@ -6,7 +6,6 @@
 #define HESHMAP_HESHMAP_H
 
 #include "LinkedList.h"
-
 #include <iostream>
 #include <ctime>
 #include <cstdlib>
@@ -15,16 +14,12 @@
 template <typename T>
 class Hashmap {
 private:
-    struct HashNode{
-        T Data;
-        long long index;
-    };
     int size=0;
     int arrlen=1;
     float coefload=size/arrlen;
+    LinkedList<T> *array = new LinkedList<T>[arrlen];
     void resize_arr() {
-
-        LinkedList<HashNode> *new_arr = new LinkedList<HashNode>[arrlen * 2];
+        LinkedList<T> *new_arr = new LinkedList<T>[arrlen * 2];
 
         for (int i = 0; i < arrlen; i++) {
             new_arr[i] = array[i];
@@ -34,19 +29,31 @@ private:
         arrlen *= 2;
         delete[] array;
         array = new_arr;
+
         for(int i = 0;i < oldarrlen;i++){
             if(array[i].size() != 0){
                 int LinkedList_size = array[i].size();
                 for(int j = 0; j < LinkedList_size;j++){
-                    HashNode b = array[i].pop_front();
-                    coefload = size/arrlen;
-                    hashd(b.Data);
+                    long long key = array[i].pop_front_key();
+                    T val = array[i].pop_front();
+                    long long index = hash(key);
+                    array[index].push_back(key,val);
                 }
             }
         }
     }
+    long long hash(unsigned long long key)
+    {
+        return ((3 * key - 5) % 9149658775000477) % arrlen;
+    }
 public:
-    LinkedList<HashNode> *array = new LinkedList<HashNode>[arrlen];
+    ~Hashmap(){
+        delete [] array;
+    }
+
+    long sizeH(){
+        return size;
+    }
 
     long long generateRandLong(){
         string str = "";
@@ -70,29 +77,30 @@ public:
 
     }
 
-    long long hash(T data){
-        coefload = size/arrlen;
+    void insert(long long key,T value){
+        coefload = (float)size/(float)arrlen;
         if(coefload>=1){
             resize_arr();
         }
-        HashNode a;
-        long long c = generateRandLong()%arrlen;
-        a.index = c;
-        a.Data = data;
-        array[a.index].push_back(a);
+        long long index = hash(key);
+        T *pointer = array[index].get(key);
+        if(pointer != nullptr){
+            *pointer = value;
+            return;
+        }
+        array[index].push_back(key, value);
         size++;
-        return a.index;
-    }
-    long long hashd(T data){
-        coefload = size/arrlen;
-        HashNode a;
-        long long c = generateRandLong()%arrlen;
-        a.index = c;
-        a.Data = data;
-        array[a.index].push_back(a);
-        return a.index;
     }
 
+    void erase(long long key){
+        long long index = hash(key);
+        int sizefirst = array[index].size();
+        array[index].del_el(key);
+        int sizesecond = array[index].size();
+        if(sizefirst != sizesecond){
+            size--;
+        }
+    }
 };
 
 
