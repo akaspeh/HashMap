@@ -7,7 +7,6 @@
 
 using namespace std;
 
-
 int main() {
     srand(time(nullptr));
     Hashmap<int> Hashmap;
