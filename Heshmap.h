@@ -38,7 +38,7 @@ private:
         delete[] array;
         array = new_arr;
     }
-    long long hash(unsigned long long key)
+    long long hash(long long key)
     {
         return ((a * key + b) % 9149658775000477) % arrlen;
     }
