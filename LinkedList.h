@@ -57,7 +57,7 @@ public:
         }
     }
 
-    long long pop_front_key(){
+    long long get_front_key(){
         if(cur == -1){
             cout << "nothing to pop\n";
             return 0;

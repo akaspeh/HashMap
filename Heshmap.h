@@ -14,33 +14,29 @@
 template <typename T>
 class Hashmap {
 private:
-    int size=0;
-    int arrlen=1;
+    long long size=0;
+    long long arrlen=1;
     float coefload=size/arrlen;
     LinkedList<T> *array = new LinkedList<T>[arrlen];
     void resize_arr() {
         LinkedList<T> *new_arr = new LinkedList<T>[arrlen * 2];
 
-        for (int i = 0; i < arrlen; i++) {
-            new_arr[i] = array[i];
-        }
-
         int oldarrlen = arrlen;
         arrlen *= 2;
-        delete[] array;
-        array = new_arr;
 
         for(int i = 0;i < oldarrlen;i++){
             if(array[i].size() != 0){
                 int LinkedList_size = array[i].size();
                 for(int j = 0; j < LinkedList_size;j++){
-                    long long key = array[i].pop_front_key();
+                    long long key = array[i].get_front_key();
                     T val = array[i].pop_front();
                     long long index = hash(key);
-                    array[index].push_back(key,val);
+                    new_arr[index].push_back(key,val);
                 }
             }
         }
+        delete[] array;
+        array = new_arr;
     }
     long long hash(unsigned long long key)
     {
@@ -51,7 +47,7 @@ public:
         delete [] array;
     }
 
-    long sizeH(){
+    long long sizeH(){
         return size;
     }
 

@@ -12,7 +12,8 @@ int main() {
     Hashmap<int> Hashmap;
     for(int i = 0; i < 1000; i++){
         int a = rand()%1000;
-        Hashmap.insert(rand()%50,a);
+        Hashmap.insert(i,a);
     }
+    cout << Hashmap.sizeH();
     return 0;
 }
