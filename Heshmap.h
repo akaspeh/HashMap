@@ -14,6 +14,8 @@
 template <typename T>
 class Hashmap {
 private:
+    short a;
+    short b;
     long long size=0;
     long long arrlen=1;
     float coefload=size/arrlen;
@@ -29,9 +31,7 @@ private:
                 int LinkedList_size = array[i].size();
                 for(int j = 0; j < LinkedList_size;j++){
                     long long key = array[i].get_front_key();
-                    T val = array[i].pop_front();
-                    long long index = hash(key);
-                    new_arr[index].push_back(key,val);
+                    new_arr[hash(key)].push_back(key,array[i].pop_front());
                 }
             }
         }
@@ -40,25 +40,17 @@ private:
     }
     long long hash(unsigned long long key)
     {
-        return ((3 * key - 5) % 9149658775000477) % arrlen;
+        return ((a * key + b) % 9149658775000477) % arrlen;
     }
 public:
+    Hashmap(): a(rand()%9 + 1), b(rand()%9+1){}
+
     ~Hashmap(){
         delete [] array;
     }
 
     long long sizeH(){
         return size;
-    }
-
-    long long generateRandLong(){
-        string str = "";
-        for(int i = 0; i < 10;i++){
-            char a = rand() % 10 + 48;
-            str[i] = a;
-        }
-        long long num = stoll(str);
-        return num;
     }
 
     void len(){
@@ -73,7 +65,7 @@ public:
 
     }
 
-    void insert(long long key,T value){
+    void insert(long long key,const T& value){
         coefload = (float)size/(float)arrlen;
         if(coefload>=1){
             resize_arr();
@@ -96,6 +88,11 @@ public:
         if(sizefirst != sizesecond){
             size--;
         }
+    }
+
+    T* find(long long key){
+        long long index = hash(key);
+        return array[index].get(key);
     }
 };
 
